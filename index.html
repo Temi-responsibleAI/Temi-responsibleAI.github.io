@@ -67,14 +67,25 @@ body { font-family: 'DM Sans', sans-serif; }
  </head>
  <body class="h-full">
   <div id="app" class="h-full w-full overflow-auto" style="background: var(--bg-color, #0f172a);"><!-- Header -->
-   <header class="px-6 pt-6 pb-4 max-w-4xl mx-auto">
-    <div class="flex items-center gap-3 mb-1">
-     <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: var(--primary-action, #6d28d9);">
+<!-- Header -->
+<header class="px-6 pt-6 pb-4 max-w-4xl mx-auto">
+  <div class="flex items-center gap-3 mb-1">
+    <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: var(--primary-action, #6d28d9);">
       <i data-lucide="brain" style="width:18px;height:18px;color:#fff;"></i>
-     </div><span class="text-xs font-semibold tracking-widest uppercase" style="color: var(--primary-action, #6d28d9);">Study Module</span>
     </div>
-    <h1 id="el-title" class="font-display text-2xl md:text-3xl font-bold leading-tight" style="color: var(--text-color, #f1f5f9);">Module 1: Foundational Governance</h1>
-    <p id="el-subtitle" class="mt-1 text-sm" style="color: var(--secondary-action, #94a3b8);">AI Governance &amp; Regulatory Frameworks</p>
+    <span class="text-xs font-semibold tracking-widest uppercase" style="color: var(--primary-action, #6d28d9);">
+      Temi’s Responsible AI
+    </span>
+  </div>
+
+  <h1 id="el-title" class="font-display text-2xl md:text-3xl font-bold leading-tight" style="color: var(--text-color, #f1f5f9);">
+    Module 1: Foundational Governance
+  </h1>
+
+  <p id="el-subtitle" class="mt-1 text-sm" style="color: var(--secondary-action, #94a3b8);">
+    AI Governance &amp; Regulatory Frameworks
+  </p>
+</header>
    </header><!-- Tabs -->
    <nav class="max-w-4xl mx-auto px-6 flex gap-6 border-b" style="border-color: var(--surface-color, #1e293b);" role="tablist"><button class="tab-btn active pb-3 text-sm cursor-pointer bg-transparent border-0" style="--primary-action: #6d28d9;" data-tab="flashcards" role="tab">Flashcards</button> <button class="tab-btn pb-3 text-sm cursor-pointer bg-transparent border-0" style="color: var(--secondary-action, #94a3b8);" data-tab="review" role="tab">Quick Review</button> <button class="tab-btn pb-3 text-sm cursor-pointer bg-transparent border-0" style="color: var(--secondary-action, #94a3b8);" data-tab="compare" role="tab">Framework Comparison</button> <button class="tab-btn pb-3 text-sm cursor-pointer bg-transparent border-0" style="color: var(--secondary-action, #94a3b8);" data-tab="risk" role="tab">Risk Spot Check</button>
    </nav><!-- Main Content -->
