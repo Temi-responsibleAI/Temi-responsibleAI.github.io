@@ -1,13 +1,160 @@
-<!DOCTYPE html>
-<html>
-<head>
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Temi Responsible AI</title>
-</head>
-<body>
-  <h1>Temi Responsible AI</h1>
-  <p>Welcome to my website.</p>
-  <p>I am interested in responsible AI, technology, and innovation.</p>
-</body>
+  <title>AI Governance Flashcards</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Fraunces:wght@600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    html, body { height: 100%; margin: 0; }
+    .card-flip { perspective: 1000px; }
+    .card-inner { transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); transform-style: preserve-3d; }
+    .card-inner.flipped { transform: rotateY(180deg); }
+    .card-face { backface-visibility: hidden; position: absolute; inset: 0; }
+    .card-back { transform: rotateY(180deg); }
+    @keyframes slideIn { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+    .slide-in { animation: slideIn 0.4s ease-out; }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full overflow-auto" style="background:#0f1729; font-family:'DM Sans',sans-serif;">
+   <div class="max-w-2xl mx-auto px-4 py-8 flex flex-col items-center" style="min-height:100%;"><!-- Header -->
+    <div class="text-center mb-6 w-full">
+     <p class="text-xs font-medium tracking-widest uppercase mb-2" style="color:#6ee7b7;">Module 1</p>
+     <h1 id="title" class="text-2xl md:text-3xl font-bold leading-tight" style="font-family:'Fraunces',serif; color:#e2e8f0;">Foundational Governance &amp; Regulatory Frameworks</h1>
+    </div><!-- Progress -->
+    <div class="w-full flex items-center gap-3 mb-6">
+     <div class="flex-1 h-2 rounded-full overflow-hidden" style="background:#1e293b;">
+      <div id="progressBar" class="h-full rounded-full transition-all duration-300" style="background:linear-gradient(90deg,#6ee7b7,#34d399); width:4.5%"></div>
+     </div><span id="counter" class="text-sm font-medium" style="color:#94a3b8;">1 / 22</span>
+    </div><!-- Flashcard -->
+    <div class="card-flip w-full flex-1 mb-6 slide-in" id="cardContainer" style="max-height:400px; min-height:260px; cursor:pointer;" onclick="flipCard()">
+     <div class="card-inner w-full h-full rounded-2xl" id="cardInner">
+      <div class="card-face flex flex-col justify-center p-8 rounded-2xl border" style="background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%); border-color:#334155;">
+       <p class="text-xs font-medium tracking-widest uppercase mb-4" style="color:#6ee7b7;">Question</p>
+       <p id="questionText" class="text-lg md:text-xl font-medium leading-relaxed" style="color:#f1f5f9;"></p>
+      </div>
+      <div class="card-face card-back flex flex-col justify-center p-8 rounded-2xl border" style="background:linear-gradient(135deg,#064e3b 0%,#0f172a 100%); border-color:#065f46;">
+       <p class="text-xs font-medium tracking-widest uppercase mb-4" style="color:#6ee7b7;">Answer</p>
+       <p id="answerText" class="text-base md:text-lg leading-relaxed" style="color:#d1fae5;"></p>
+      </div>
+     </div>
+    </div>
+    <p class="text-xs mb-5" style="color:#475569;">Click card to flip</p><!-- Controls -->
+    <div class="flex items-center gap-4 mb-6"><button onclick="prevCard()" class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all" style="background:#1e293b; color:#94a3b8; border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'"> <i data-lucide="chevron-left" style="width:16px;height:16px;"></i> Prev </button> <button onclick="shuffleCards()" class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all" style="background:#1e293b; color:#94a3b8; border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'"> <i data-lucide="shuffle" style="width:16px;height:16px;"></i> Shuffle </button> <button onclick="nextCard()" class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all" style="background:#065f46; color:#6ee7b7; border:1px solid #047857;" onmouseover="this.style.background='#047857'" onmouseout="this.style.background='#065f46'"> Next <i data-lucide="chevron-right" style="width:16px;height:16px;"></i> </button>
+    </div><!-- Know/Don't Know -->
+    <div class="flex items-center gap-3 mb-4"><button onclick="markCard(true)" class="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-all" style="background:#052e16; color:#4ade80; border:1px solid #166534;" onmouseover="this.style.background='#166534'" onmouseout="this.style.background='#052e16'"> <i data-lucide="check" style="width:14px;height:14px;"></i> Know it </button> <button onclick="markCard(false)" class="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-all" style="background:#1c1917; color:#f87171; border:1px solid #7f1d1d;" onmouseover="this.style.background='#7f1d1d'" onmouseout="this.style.background='#1c1917'"> <i data-lucide="x" style="width:14px;height:14px;"></i> Review later </button>
+    </div>
+    <p id="score" class="text-xs" style="color:#475569;"></p>
+   </div>
+  </div>
+  <script>
+const flashcards = [
+  {q:"What is the main focus of Module 1: Foundational Governance & Regulatory Frameworks?",a:"Understanding the legal and regulatory landscape for AI systems, including compliance obligations, risk management strategies, and governance frameworks."},
+  {q:"Who is the target audience for this module?",a:"Both technical and non-technical learners interested in AI governance, compliance, and risk management."},
+  {q:"Name the three main AI governance frameworks covered in this module.",a:"1) EU AI Act, 2) NIST AI Risk Management Framework (AI RMF), 3) OECD AI Principles."},
+  {q:"What is the EU AI Act (Regulation (EU) 2024/1689)?",a:"The first comprehensive legal framework regulating AI in the EU, focusing on a risk-based approach with penalties for non-conformance."},
+  {q:"When did prohibitions under the EU AI Act take effect?",a:"Around January 2025."},
+  {q:"What types of AI practices are prohibited under the EU AI Act?",a:"AI posing unacceptable risks to fundamental rights, e.g., real-time public biometric identification by law enforcement, manipulative subliminal techniques."},
+  {q:"What are high-risk AI systems according to the EU AI Act?",a:"Systems used in critical infrastructure, education, employment, essential services, law enforcement, migration management, and democratic processes."},
+  {q:"What are the key obligations for high-risk AI systems under the EU AI Act?",a:"Risk management, data governance, technical documentation, human oversight, robustness, accuracy, cybersecurity, and post-market monitoring."},
+  {q:"What is the Fundamental Rights Impact Assessment (FRIA)?",a:"A required assessment for deployers of high-risk AI systems to evaluate impact on fundamental rights (EU AI Act, Article 27)."},
+  {q:"What is General-Purpose AI (GPAI) under the EU AI Act?",a:"AI models that pose systemic risk, with obligations including model evaluation, adversarial testing, and cybersecurity."},
+  {q:"What is the purpose of the NIST AI Risk Management Framework (AI RMF)?",a:"A voluntary guide to improve trustworthiness of AI systems by helping organizations identify, assess, manage, and monitor AI risks across the lifecycle."},
+  {q:"Name the four core functions of the NIST AI RMF.",a:"Govern, Map, Measure, Manage."},
+  {q:'Give one example of an activity under "Govern" in the NIST AI RMF.',a:"Establish roles and responsibilities for AI development, set ethical guidelines, conduct stakeholder engagement."},
+  {q:'Give one example of an activity under "Map" in the NIST AI RMF.',a:"Conduct a data impact assessment, identify potential biases in training data, assess societal impacts."},
+  {q:'Give one example of an activity under "Measure" in the NIST AI RMF.',a:"Continuous monitoring of model performance, establish fairness and transparency metrics, conduct regular audits."},
+  {q:'Give one example of an activity under "Manage" in the NIST AI RMF.',a:"Develop incident response plans for AI failures, implement bias mitigation, establish communication protocols."},
+  {q:"What are the OECD AI Principles?",a:"International guidelines promoting responsible, trustworthy, and human-centric AI, adopted in 2019 and updated in 2024."},
+  {q:"List three values-based principles from the OECD AI Principles.",a:"1) Inclusive growth, sustainable development, and well-being. 2) Human-centred values and fairness. 3) Transparency and explainability."},
+  {q:"What are some OECD policy recommendations for national AI strategies?",a:"Investing in AI R&D, fostering digital ecosystems, enabling policies, building human capacity, international cooperation."},
+  {q:"Compare the regulatory status of EU AI Act, NIST AI RMF, and OECD AI Principles.",a:"EU AI Act: legally binding; NIST AI RMF: voluntary; OECD AI Principles: voluntary guidelines."},
+  {q:"Which frameworks adopt a risk-based approach?",a:"EU AI Act (explicit classifications) and NIST AI RMF (guidelines for risk management)."},
+  {q:"Which values are shared across all three frameworks?",a:"Transparency, accountability, fairness, human oversight, and safety/robustness."}
+];
+
+let cards = [...flashcards];
+let idx = 0;
+let known = new Set();
+let review = new Set();
+
+const defaultConfig = {
+  module_title: "Foundational Governance & Regulatory Frameworks",
+  background_color: "#0f1729",
+  surface_color: "#1e293b",
+  text_color: "#e2e8f0",
+  primary_action: "#065f46",
+  secondary_action: "#334155",
+  font_family: "Fraunces",
+  font_size: 16
+};
+
+function render() {
+  const c = cards[idx];
+  document.getElementById('questionText').textContent = c.q;
+  document.getElementById('answerText').textContent = c.a;
+  document.getElementById('cardInner').classList.remove('flipped');
+  document.getElementById('counter').textContent = `${idx+1} / ${cards.length}`;
+  document.getElementById('progressBar').style.width = `${((idx+1)/cards.length)*100}%`;
+  document.getElementById('score').textContent = `✓ ${known.size} known · ✗ ${review.size} to review`;
+  document.getElementById('cardContainer').classList.remove('slide-in');
+  void document.getElementById('cardContainer').offsetWidth;
+  document.getElementById('cardContainer').classList.add('slide-in');
+}
+
+function flipCard() { document.getElementById('cardInner').classList.toggle('flipped'); }
+function nextCard() { idx = (idx+1) % cards.length; render(); }
+function prevCard() { idx = (idx-1+cards.length) % cards.length; render(); }
+function shuffleCards() { for(let i=cards.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cards[i],cards[j]]=[cards[j],cards[i]];} idx=0; render(); }
+function markCard(know) { const q=cards[idx].q; if(know){known.add(q);review.delete(q);}else{review.add(q);known.delete(q);} nextCard(); }
+
+render();
+
+window.elementSdk.init({
+  defaultConfig,
+  onConfigChange: async (config) => {
+    const title = config.module_title || defaultConfig.module_title;
+    document.getElementById('title').textContent = title;
+
+    const bg = config.background_color || defaultConfig.background_color;
+    document.getElementById('app').style.background = bg;
+
+    const txt = config.text_color || defaultConfig.text_color;
+    document.getElementById('title').style.color = txt;
+    document.getElementById('questionText').style.color = txt;
+
+    const font = config.font_family || defaultConfig.font_family;
+    document.getElementById('title').style.fontFamily = `${font}, Fraunces, serif`;
+
+    const sz = config.font_size || defaultConfig.font_size;
+    document.getElementById('title').style.fontSize = `${sz*1.75}px`;
+    document.getElementById('questionText').style.fontSize = `${sz*1.15}px`;
+    document.getElementById('answerText').style.fontSize = `${sz}px`;
+  },
+  mapToCapabilities: (config) => ({
+    recolorables: [
+      { get:()=>config.background_color||defaultConfig.background_color, set:(v)=>{config.background_color=v;window.elementSdk.setConfig({background_color:v})} },
+      { get:()=>config.surface_color||defaultConfig.surface_color, set:(v)=>{config.surface_color=v;window.elementSdk.setConfig({surface_color:v})} },
+      { get:()=>config.text_color||defaultConfig.text_color, set:(v)=>{config.text_color=v;window.elementSdk.setConfig({text_color:v})} },
+      { get:()=>config.primary_action||defaultConfig.primary_action, set:(v)=>{config.primary_action=v;window.elementSdk.setConfig({primary_action:v})} },
+      { get:()=>config.secondary_action||defaultConfig.secondary_action, set:(v)=>{config.secondary_action=v;window.elementSdk.setConfig({secondary_action:v})} }
+    ],
+    borderables: [],
+    fontEditable: { get:()=>config.font_family||defaultConfig.font_family, set:(v)=>{config.font_family=v;window.elementSdk.setConfig({font_family:v})} },
+    fontSizeable: { get:()=>config.font_size||defaultConfig.font_size, set:(v)=>{config.font_size=v;window.elementSdk.setConfig({font_size:v})} }
+  }),
+  mapToEditPanelValues: (config) => new Map([
+    ["module_title", config.module_title || defaultConfig.module_title]
+  ])
+});
+
+lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e995bd68030a2fc',t:'MTc3NTczNjEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
